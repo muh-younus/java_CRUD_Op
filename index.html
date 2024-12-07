@@ -54,11 +54,11 @@
                 <li class="list-group-item border1 d-flex justify-content-between">
                     <h3 class="flex-grow-1">Chapter</h3>
 
-                    <div>
-                        <button class="btn btn-primary mx-3">Edit</button>
-                        <button class="btn btn-danger">Remove</button>
+                    
+                        <button class="btn btn-primary mx-3" onclick="editChapter(this)">Done</button>
+                        <button class="btn btn-danger" onclick="removeChapter(this)">Remove</button>
 
-                    </div>
+                    
 
 
                 </li>
@@ -76,37 +76,83 @@
         let button = document.getElementById("add_btn");
         let parentList = document.getElementById("parentList");
 
+        
 
-        function addChapter(e) {
+        function addChapter(e){
 
-            let current = e.currentTarget;
-            let text = current.previousElementSibling;
-            let currentText = text.value;
+            if(parentList.children[0].className == "emptyMsg"){
 
-            var newList = document.createElement('li');
-            newList.classList.add('list-group-item');
+            parentList.children[0].remove();
+            }
+
+            let currentBtn = e.currentTarget;
+            let prevSibling = currentBtn.previousElementSibling;
+            let chapterName = prevSibling.value;
+            //console.log(prevSibling.value);
+
+            let newElement = document.createElement("li");
+            //newElement.classList.add("list-group-item");
+            newElement.className = "list-group-item border1 d-flex justify-content-between";
             
-            newList.textContent = text.value;
+            newElement.innerHTML = `<h3 class="flex-grow-1">${chapterName}</h3>
 
-            parentList.appendChild(newList);
-            //newList.className = "list-group-item border1 d-flex justify-content-between";
-
-            newList.innerHTML = `<li class="list-group-item border1 d-flex justify-content-between">
-                    <h3 class="flex-grow-1">${currentText}</h3>
-
-                    <div>
                     
                         <button class="btn btn-primary mx-3">Edit</button>
-                        <button class="btn btn-danger">Remove</button>
-                        </div>
-                    
-                </li>`
+                        <button class="btn btn-danger" onclick="removeChapter(this)">Remove</button>`;
+            parentList.appendChild(newElement);
+            console.log(parentList.children);
+        }
+        button.addEventListener("click", addChapter);
 
+        // Remove-Code
+
+        function removeChapter(currentElement){
+
+            currentElement.parentElement.remove();
+            if(parentList.children.length <= 0){
+
+                let heading = document.createElement("h3");
+                heading.textContent = "The list is Empty!";
+                parentList.appendChild(heading);
+                heading.classList.add("emptyMsg");
+            }
+            
 
 
         }
 
-        button.addEventListener('click', addChapter);
+        // Edit-Code
+
+        function editChapter(editElement){
+
+            if(editElement.textContent == "Done"){
+
+                editElement.textContent = "Edit";
+                let currChapterName = editElement.previousElementSibling.value;
+                let newHeading = document.createElement("h3");
+                newHeading.className = "flex-grow-1";
+                newHeading.textContent = currChapterName;
+                editElement.parentElement.replaceChild(newHeading,editElement.previousElementSibling);
+                
+            }
+            else{
+
+                //console.log(editElement.previousElementSibling);
+                editElement.textContent = "Done";
+            let currChapterName = editElement.previousElementSibling.innerText;
+            let newInput = document.createElement("input");
+            newInput.type = "text"; 
+            newInput.className = "form-control";
+            newInput.value=currChapterName;
+            editElement.parentElement.replaceChild(newInput,editElement.previousElementSibling);
+
+
+            }
+
+            
+        }
+
+        
     </script>
 
 </body>
